@@ -12,7 +12,11 @@ public class WeaponData : ScriptableObject
     public float fireDelay = 0.25f;
     public bool automatic = false;
 
-    [Header("Trazado")]
+    [Header("Munición")]
+    [Min(1)] public int magazineSize = 12;
+    [Min(0.1f)] public float reloadTime = 2f;
+
+    [Header("Trazador")]
     public Color tracerColor = Color.yellow;
     public float tracerWidth = 0.02f;
     public float tracerDuration = 0.05f;

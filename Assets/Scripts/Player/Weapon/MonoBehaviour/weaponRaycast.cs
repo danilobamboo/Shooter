@@ -1,8 +1,8 @@
+using System;
 using UnityEngine;
-
 public class HitscanWeapon : MonoBehaviour
 {
-    [Header("Datos")]
+    [Header("Datos del arma")]
     [SerializeField] private WeaponData data;
 
     [Header("Referencias")]
@@ -13,14 +13,34 @@ public class HitscanWeapon : MonoBehaviour
     [Header("Física")]
     [SerializeField] private LayerMask hitMask = ~0;
 
+    [Header("Controles")]
+    [SerializeField] private KeyCode reloadKey = KeyCode.R;
+
+
+    public event Action<int, int> OnAmmoChanged;
+
+    public int CurrentAmmo { get; private set; }
+    public int MagazineSize => data != null ? data.magazineSize : 0;
+    public bool IsReloading { get; private set; }
+
+    public float ReloadProgress
+    {
+        get
+        {
+            if (!IsReloading) return 0f;
+            float remaining = reloadEndTime - Time.time;
+            return Mathf.Clamp01(1f - remaining / data.reloadTime);
+        }
+    }
     private float nextFireTime;
+    private float reloadEndTime;
     private float tracerHideTime;
 
     private void Awake()
     {
         if (data == null)
         {
-            Debug.LogError("HitscanWeapon: macana.", this);
+            Debug.LogError("HitscanWeapon: falta asignar un WeaponData.", this);
             enabled = false;
             return;
         }
@@ -32,16 +52,29 @@ public class HitscanWeapon : MonoBehaviour
         tracer.useWorldSpace = true;
         tracer.positionCount = 2;
         tracer.enabled = false;
+
+        CurrentAmmo = data.magazineSize;
     }
 
     private void Update()
     {
-        bool wantsToFire = data.automatic ? Input.GetButton("Fire1")
-                                          : Input.GetButtonDown("Fire1");
-
-        if (wantsToFire && Time.time >= nextFireTime)
+        if (IsReloading)
         {
-            Fire();
+            if (Time.time >= reloadEndTime) FinishReload();
+        }
+        else if (Input.GetKeyDown(reloadKey) && CurrentAmmo < data.magazineSize)
+        {
+            StartReload();
+        }
+        else
+        {
+            bool wantsToFire = data.automatic ? Input.GetButton("Fire1")
+                                              : Input.GetButtonDown("Fire1");
+
+            if (wantsToFire && Time.time >= nextFireTime)
+            {
+                Fire();
+            }
         }
 
         if (tracer.enabled && Time.time >= tracerHideTime)
@@ -53,6 +86,9 @@ public class HitscanWeapon : MonoBehaviour
     private void Fire()
     {
         nextFireTime = Time.time + data.fireDelay;
+
+        CurrentAmmo--;
+        OnAmmoChanged?.Invoke(CurrentAmmo, data.magazineSize);
 
         Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
         Vector3 endPoint;
@@ -69,6 +105,24 @@ public class HitscanWeapon : MonoBehaviour
         }
 
         ShowTracer(muzzle.position, endPoint);
+
+        if (CurrentAmmo <= 0)
+        {
+            StartReload();
+        }
+    }
+
+    private void StartReload()
+    {
+        IsReloading = true;
+        reloadEndTime = Time.time + data.reloadTime;
+    }
+
+    private void FinishReload()
+    {
+        IsReloading = false;
+        CurrentAmmo = data.magazineSize;
+        OnAmmoChanged?.Invoke(CurrentAmmo, data.magazineSize);
     }
 
     private void ShowTracer(Vector3 start, Vector3 end)
