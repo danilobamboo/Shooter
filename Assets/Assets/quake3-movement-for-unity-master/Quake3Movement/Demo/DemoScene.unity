@@ -2080,7 +2080,7 @@ MonoBehaviour:
     m_Smooth: 0
     m_SmoothTime: 5
     m_LockCursor: 1
-  m_Friction: 6
+  m_Friction: 10
   m_Gravity: 20
   m_JumpForce: 8
   m_AutoBunnyHop: 1
@@ -2667,18 +2667,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83160e3cef9bde940a393dd239e11520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HitscanWeapon
+  data: {fileID: 11400000, guid: 4fe0dbc2d1f62d64a9a6b13e03435b97, type: 2}
   playerCamera: {fileID: 608072923}
   muzzle: {fileID: 594230045}
   tracer: {fileID: 0}
-  range: 100
-  fireDelay: 0.3
-  automatic: 1
   hitMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  tracerDuration: 0.05
-  tracerWidth: 0.02
-  tracerColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
