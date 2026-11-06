@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b533ee82df119848b3aa8bd3dfaa2c1, type: 3}
+  m_Name: SMG
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponData
+  weaponName: Pistola
+  damage: 8
+  range: 100
+  fireDelay: 0.07
+  automatic: 1
+  magazineSize: 30
+  reloadTime: 2.5
+  tracerColor: {r: 1, g: 0.2245953, b: 0.015686274, a: 1}
+  tracerWidth: 0.02
+  tracerDuration: 0.05

@@ -17,6 +17,8 @@ MonoBehaviour:
   range: 100
   fireDelay: 0.25
   automatic: 1
+  magazineSize: 12
+  reloadTime: 1.7
   tracerColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   tracerWidth: 0.02
   tracerDuration: 0.05

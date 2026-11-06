@@ -4,8 +4,8 @@ using UnityEngine.UI;
 
 public class AmmoHUD : MonoBehaviour
 {
-    [Header("Arma a mostrar")]
-    [SerializeField] private HitscanWeapon weapon;
+    [Header("Gestor de armas")]
+    [SerializeField] private WeaponSwitcher switcher;
 
     [Header("Munición")]
     [SerializeField] private TMP_Text ammoText;
@@ -14,40 +14,52 @@ public class AmmoHUD : MonoBehaviour
     [SerializeField] private GameObject reloadRoot;
     [SerializeField] private Image reloadFill;
 
+    private HitscanWeapon currentWeapon;
+
     private void Awake()
     {
         reloadFill.type = Image.Type.Filled;
         reloadFill.fillMethod = Image.FillMethod.Radial360;
         reloadFill.fillOrigin = (int)Image.Origin360.Top;
         reloadFill.fillClockwise = true;
+
+        reloadRoot.SetActive(false);
     }
 
     private void OnEnable()
     {
-        if (weapon != null) weapon.OnAmmoChanged += UpdateAmmoText;
+        if (switcher == null)
+        {
+            Debug.LogError("AmmoHUD: falta asignar el WeaponSwitcher.", this);
+            return;
+        }
+
+        switcher.OnWeaponChanged += HandleWeaponChanged;
+
+        if (currentWeapon != null) currentWeapon.OnAmmoChanged += UpdateAmmoText;
     }
 
     private void OnDisable()
     {
-        if (weapon != null) weapon.OnAmmoChanged -= UpdateAmmoText;
+        if (switcher != null) switcher.OnWeaponChanged -= HandleWeaponChanged;
+        if (currentWeapon != null) currentWeapon.OnAmmoChanged -= UpdateAmmoText;
     }
 
-    private void Start()
+    private void HandleWeaponChanged(HitscanWeapon newWeapon)
     {
-        if (weapon == null)
-        {
-            Debug.LogError("AmmoHUD: falta asignar el arma.", this);
-            enabled = false;
-            return;
-        }
+        if (currentWeapon != null) currentWeapon.OnAmmoChanged -= UpdateAmmoText;
 
-        UpdateAmmoText(weapon.CurrentAmmo, weapon.MagazineSize);
-        reloadRoot.SetActive(false);
+        currentWeapon = newWeapon;
+        currentWeapon.OnAmmoChanged += UpdateAmmoText;
+
+        UpdateAmmoText(currentWeapon.CurrentAmmo, currentWeapon.MagazineSize);
     }
 
     private void Update()
     {
-        bool isReloading = weapon.IsReloading;
+        if (currentWeapon == null) return;
+
+        bool isReloading = currentWeapon.IsReloading;
 
         if (reloadRoot.activeSelf != isReloading)
         {
@@ -56,7 +68,7 @@ public class AmmoHUD : MonoBehaviour
 
         if (isReloading)
         {
-            reloadFill.fillAmount = weapon.ReloadProgress;
+            reloadFill.fillAmount = currentWeapon.ReloadProgress;
         }
     }
 
