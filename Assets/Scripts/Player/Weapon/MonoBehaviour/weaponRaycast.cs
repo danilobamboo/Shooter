@@ -67,7 +67,6 @@ public class HitscanWeapon : MonoBehaviour
 
     private void OnDisable()
     {
-
         IsReloading = false;
 
         if (tracer != null) tracer.enabled = false;
@@ -114,6 +113,7 @@ public class HitscanWeapon : MonoBehaviour
         {
             endPoint = hit.point;
 
+            hit.collider.GetComponentInParent<IDamageable>()?.TakeDamage(data.damage);
         }
         else
         {
@@ -136,7 +136,6 @@ public class HitscanWeapon : MonoBehaviour
 
     private void FinishReload()
     {
-
         IsReloading = false;
         CurrentAmmo = data.magazineSize;
         OnAmmoChanged?.Invoke(CurrentAmmo, data.magazineSize);
