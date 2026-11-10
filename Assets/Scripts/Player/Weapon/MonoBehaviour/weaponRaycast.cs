@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+
 public class HitscanWeapon : MonoBehaviour
 {
     [Header("Datos del arma")]
@@ -16,7 +17,6 @@ public class HitscanWeapon : MonoBehaviour
     [Header("Controles")]
     [SerializeField] private KeyCode reloadKey = KeyCode.R;
 
-
     public event Action<int, int> OnAmmoChanged;
 
     public int CurrentAmmo { get; private set; }
@@ -32,6 +32,7 @@ public class HitscanWeapon : MonoBehaviour
             return Mathf.Clamp01(1f - remaining / data.reloadTime);
         }
     }
+
     private float nextFireTime;
     private float reloadEndTime;
     private float tracerHideTime;
@@ -54,6 +55,22 @@ public class HitscanWeapon : MonoBehaviour
         tracer.enabled = false;
 
         CurrentAmmo = data.magazineSize;
+    }
+
+    private void OnEnable()
+    {
+        if (data != null && CurrentAmmo <= 0 && !IsReloading)
+        {
+            StartReload();
+        }
+    }
+
+    private void OnDisable()
+    {
+
+        IsReloading = false;
+
+        if (tracer != null) tracer.enabled = false;
     }
 
     private void Update()
@@ -97,7 +114,6 @@ public class HitscanWeapon : MonoBehaviour
         {
             endPoint = hit.point;
 
-            Debug.Log($"{data.weaponName} impactó en {hit.collider.name} ({data.damage} de daño)");
         }
         else
         {
@@ -120,6 +136,7 @@ public class HitscanWeapon : MonoBehaviour
 
     private void FinishReload()
     {
+
         IsReloading = false;
         CurrentAmmo = data.magazineSize;
         OnAmmoChanged?.Invoke(CurrentAmmo, data.magazineSize);
