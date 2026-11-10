@@ -19,9 +19,14 @@ public class EnemyData : ScriptableObject
     [Range(10f, 360f)] public float fieldOfView = 110f;
     public float loseSightTime = 4f;
 
-    [Header("Ataque (cuerpo a cuerpo)")]
-    public float attackRange = 1.8f;
-    public float attackDamage = 10f;
-    public float attackCooldown = 1.2f;
-    public float attackWindup = 0.4f;
+    [Header("Combate")]
+    public WeaponData weapon;
+    public float combatRange = 12f;
+    [Range(0f, 15f)] public float aimSpreadAngle = 4f;
+    public float reactionTime = 0.5f;
+
+    [Header("Esquive lateral (strafe)")]
+    public float strafeSpeed = 3f;
+    public float strafeDistance = 3f;
+    public Vector2 strafeInterval = new Vector2(0.8f, 1.6f);
 }

@@ -20,7 +20,10 @@ MonoBehaviour:
   sightRange: 18
   fieldOfView: 110
   loseSightTime: 4
-  attackRange: 1.8
-  attackDamage: 10
-  attackCooldown: 1.2
-  attackWindup: 0.4
+  weapon: {fileID: 11400000, guid: b43fe2fca6a872948a8923157a2ea31a, type: 2}
+  combatRange: 12
+  aimSpreadAngle: 4
+  reactionTime: 0.5
+  strafeSpeed: 3
+  strafeDistance: 3
+  strafeInterval: {x: 0.8, y: 1.6}
