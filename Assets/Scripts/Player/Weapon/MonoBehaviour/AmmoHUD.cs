@@ -14,7 +14,7 @@ public class AmmoHUD : MonoBehaviour
     [SerializeField] private GameObject reloadRoot;
     [SerializeField] private Image reloadFill;
 
-    private HitscanWeapon currentWeapon;
+    private Weapon currentWeapon;
 
     private void Awake()
     {
@@ -45,7 +45,7 @@ public class AmmoHUD : MonoBehaviour
         if (currentWeapon != null) currentWeapon.OnAmmoChanged -= UpdateAmmoText;
     }
 
-    private void HandleWeaponChanged(HitscanWeapon newWeapon)
+    private void HandleWeaponChanged(Weapon newWeapon)
     {
         if (currentWeapon != null) currentWeapon.OnAmmoChanged -= UpdateAmmoText;
 

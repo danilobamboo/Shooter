@@ -3,12 +3,14 @@ using UnityEngine;
 
 public class WeaponSwitcher : MonoBehaviour
 {
-    [SerializeField] private HitscanWeapon[] weapons;
+    [Tooltip("Armas en orden: la tecla 1 elige la primera, la 2 la segunda, etc.")]
+    [SerializeField] private Weapon[] weapons;
+    [Tooltip("Índice del arma con la que se empieza (0 = la primera).")]
     [SerializeField] private int startingIndex = 0;
 
-    public event Action<HitscanWeapon> OnWeaponChanged;
+    public event Action<Weapon> OnWeaponChanged;
 
-    public HitscanWeapon CurrentWeapon { get; private set; }
+    public Weapon CurrentWeapon { get; private set; }
 
     private int currentIndex = -1;
 
